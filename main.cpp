@@ -49,6 +49,28 @@ void measure_list_insertions() {
               << " ms\n";
 }
 
+// void measure_list_insertions() {
+//     std::list<int> lst;
+//     auto mid = lst.begin();  // Iterator pointing to the middle
+
+//     auto start = std::chrono::high_resolution_clock::now();
+
+//     for (int i = 0; i < 10000; ++i) {
+//         mid = lst.insert(mid, i); // Insert before mid and update the iterator
+
+//         // Maintain the middle iterator correctly
+//         if (i % 2 == 0) {
+//             ++mid; // Move forward only on even-sized lists
+//         }
+//     }
+
+//     auto end = std::chrono::high_resolution_clock::now();
+//     std::cout << "std::list insertions took: "
+//               << std::chrono::duration<double, std::milli>(end - start).count()
+//               << " ms\n";
+// }
+
+
 int main() {
     measure_vector_insertions();
     measure_vector_insertions_preallocate();
