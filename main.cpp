@@ -3,13 +3,15 @@
 #include <list>
 #include <chrono>
 
-void measure_vector_insertions() {
+
+const int N = 100000;
+void measure_vector_insertions(int N) {
     std::vector<int> vec;
-    vec.reserve(10000); // Pre-allocate memory to prevent reallocation
+    vec.reserve(N); // Pre-allocate memory to prevent reallocation
 
     auto start = std::chrono::high_resolution_clock::now();
     
-    for (int i = 0; i < 10000; ++i) {
+    for (int i = 0; i < N; ++i) {
         vec.insert(vec.begin() + vec.size() / 2, i);
     }
 
@@ -18,13 +20,13 @@ void measure_vector_insertions() {
               << std::chrono::duration<double, std::milli>(end - start).count()
               << " ms\n";
 }
-void measure_vector_insertions_preallocate() {
+void measure_vector_insertions_preallocate(int N) {
     std::vector<int> vec;
-    vec.reserve(10000); // Pre-allocate memory to prevent reallocation
+    vec.reserve(N); // Pre-allocate memory to prevent reallocation
 
     auto start = std::chrono::high_resolution_clock::now();
     
-    for (int i = 0; i < 10000; ++i) {
+    for (int i = 0; i < N; ++i) {
         vec.insert(vec.begin() + vec.size() / 2, i);
     }
 
@@ -33,13 +35,13 @@ void measure_vector_insertions_preallocate() {
               << std::chrono::duration<double, std::milli>(end - start).count()
               << " ms\n";
 }
-void measure_list_insertions() {
+void measure_list_insertions(int N) {
     std::list<int> lst;
 
     auto start = std::chrono::high_resolution_clock::now();
 
     auto it = lst.begin();
-    for (int i = 0; i < 10000; ++i) {
+    for (int i = 0; i < N; ++i) {
         it = lst.insert(std::next(lst.begin(), lst.size() / 2), i);
     }
 
@@ -49,31 +51,33 @@ void measure_list_insertions() {
               << " ms\n";
 }
 
-// void measure_list_insertions() {
-//     std::list<int> lst;
-//     auto mid = lst.begin();  // Iterator pointing to the middle
+void measure_list_insertions_fixed_middle(int N) {
+    std::list<int> lst;
+    auto mid = lst.begin();  // Iterator pointing to the middle
 
-//     auto start = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
 
-//     for (int i = 0; i < 10000; ++i) {
-//         mid = lst.insert(mid, i); // Insert before mid and update the iterator
+    for (int i = 0; i < N; ++i) {
+        mid = lst.insert(mid, i); // Insert before mid and update the iterator
 
-//         // Maintain the middle iterator correctly
-//         if (i % 2 == 0) {
-//             ++mid; // Move forward only on even-sized lists
-//         }
-//     }
+        // Maintain the middle iterator correctly
+        if (i % 2 == 0) {
+            ++mid; // Move forward only on even-sized lists
+        }
+    }
 
-//     auto end = std::chrono::high_resolution_clock::now();
-//     std::cout << "std::list insertions took: "
-//               << std::chrono::duration<double, std::milli>(end - start).count()
-//               << " ms\n";
-// }
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << "fixed middle std::list insertions took: "
+              << std::chrono::duration<double, std::milli>(end - start).count()
+              << " ms\n";
+}
 
 
 int main() {
-    measure_vector_insertions();
-    measure_vector_insertions_preallocate();
-    measure_list_insertions();
+    std::cout << "Performance difference for insertions between std::vector and std::list for " << N <<" elemenets is\n";
+    measure_vector_insertions(N);
+    measure_vector_insertions_preallocate(N);
+    measure_list_insertions(N);
+    measure_list_insertions_fixed_middle(N);
     return 0;
 }
