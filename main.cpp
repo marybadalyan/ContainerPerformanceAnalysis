@@ -3,66 +3,55 @@
 #include <list>
 #include <chrono>
 
-const int NUM_INSERTIONS = 1000000;
-
 void measure_vector_insertions() {
     std::vector<int> vec;
-    auto start = std::chrono::high_resolution_clock::now();
+    vec.reserve(10000); // Pre-allocate memory to prevent reallocation
 
-    for (int i = 0; i < NUM_INSERTIONS; ++i) {
+    auto start = std::chrono::high_resolution_clock::now();
+    
+    for (int i = 0; i < 10000; ++i) {
         vec.insert(vec.begin() + vec.size() / 2, i);
     }
 
     auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    std::cout << "std::vector insertions time: " << duration.count() << " ms\n";
+    std::cout << "std::vector insertions took: "
+              << std::chrono::duration<double, std::milli>(end - start).count()
+              << " ms\n";
 }
-
-void measure_preallocated_vector_insertions() {
+void measure_vector_insertions_preallocate() {
     std::vector<int> vec;
-    vec.reserve(NUM_INSERTIONS);  // Preallocate memory
-    auto start = std::chrono::high_resolution_clock::now();
+    vec.reserve(10000); // Pre-allocate memory to prevent reallocation
 
-    for (int i = 0; i < NUM_INSERTIONS; ++i) {
+    auto start = std::chrono::high_resolution_clock::now();
+    
+    for (int i = 0; i < 10000; ++i) {
         vec.insert(vec.begin() + vec.size() / 2, i);
     }
 
     auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    std::cout << "Preallocated std::vector insertions time: " << duration.count() << " ms\n";
+    std::cout << "std::preallocated vector insertions took: "
+              << std::chrono::duration<double, std::milli>(end - start).count()
+              << " ms\n";
 }
-
-void measure_list_insertions_with_mid_iterator() {
+void measure_list_insertions() {
     std::list<int> lst;
-    auto mid = lst.begin();  // Iterator to track the middle
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    for (int i = 0; i < NUM_INSERTIONS; i++) {
-        if (lst.empty()) {
-            lst.push_back(i);
-            mid = lst.begin();  // First element, mid points to it
-        } else {
-            // Insert the new value at the middle
-            auto it = mid;
-            lst.insert(it, i);  // Insert at the middle
-
-            // After insertion, update the mid pointer correctly
-            if (lst.size() % 2 == 0) {
-                // Even size list, move the middle pointer to the previous node
-                mid = std::prev(mid);
-            }
-        }
+    auto it = lst.begin();
+    for (int i = 0; i < 10000; ++i) {
+        it = lst.insert(std::next(lst.begin(), lst.size() / 2), i);
     }
 
     auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    std::cout << "Optimized std::list insertions time: " << duration.count() << " ms\n";
+    std::cout << "std::list insertions took: "
+              << std::chrono::duration<double, std::milli>(end - start).count()
+              << " ms\n";
 }
 
 int main() {
     measure_vector_insertions();
-    measure_preallocated_vector_insertions();
-    measure_list_insertions_with_mid_iterator();
+    measure_vector_insertions_preallocate();
+    measure_list_insertions();
     return 0;
 }
