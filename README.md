@@ -47,10 +47,10 @@ The program will output:
 To clone and run this project, you'll need Git and CMake installed on your computer. From your command line:
 
 # Clone this repository
-$ git clone https://github.com/marybadalyan/vectorvslist2
+$ git clone https://github.com/marybadalyan/ContainerPerformanceAnalysis
 
 # Go into the repository
-$ cd vectorvslist2
+$ cd ContainerPerformanceAnalysis
 
 # Generate the build files
 $ cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
