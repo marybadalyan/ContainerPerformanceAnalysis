@@ -47,31 +47,37 @@ The program will output:
 To clone and run this project, you'll need Git and CMake installed on your computer. From your command line:
 
 # Clone this repository
-$ git clone https://github.com/marybadalyan/ContainerPerformanceAnalysis
+```$ git clone https://github.com/marybadalyan/ContainerPerformanceAnalysis```
 
 # Go into the repository
-$ cd ContainerPerformanceAnalysis
+```$ cd ContainerPerformanceAnalysis```
 
 # Generate the build files
-$ cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
+```$ cmake -DCMAKE_BUILD_TYPE=Release -S . -B build```
 
 # Build the project
-$ cmake --build build --config Release
+```$ cmake --build build --config Release```
 
 Then, run the executable generated in the build directory.
 Clone the repository:
-
-
 
 ## Performance Benchmark
 
 
 ```
-Performance difference for insertions between std::vector and std::list for 100000 elemenets is
-std::vector insertions took: 171.812 ms
-std::preallocated vector insertions took: 166.423 ms
-std::list insertions took: 23612.7 ms
-fixed middle std::list insertions took: 40.2969 ms
+Performance comparison for 100000 insertions:
+
++--------------------------------------+------------+
+| Insertion Method                     | Time (ms)  |
++--------------------------------------+------------+
+| std::vector (no preallocation)       |    260.558 |
++--------------------------------------+------------+
+| std::vector (preallocated)           |    230.659 |
++--------------------------------------+------------+
+| std::list (middle recalculated)      |    16017.4 |
++--------------------------------------+------------+
+| std::list (fixed middle)             |     4.2194 |
++--------------------------------------+------------+
 ```
 **Conclusion:**  
 The ```std::vector``` implementation is significantly faster than the ```std::list``` implementation when the middle position is not fixed. This performance difference arises because accessing elements in a vector is O(1) due to contiguous memory storage, whereas accessing elements in a list is O(N) since it requires traversal. Inserting elements into a vector, however, is O(N) because it may involve shifting elements, while insertion in a list is O(1) as it only requires pointer adjustments. Despite this, vectors often outperform lists due to better cache locality. Pre-allocating space in a vector using the reserve function can further enhance performance by reducing the need for frequent reallocations. 
