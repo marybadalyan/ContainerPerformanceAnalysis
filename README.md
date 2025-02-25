@@ -81,6 +81,5 @@ Performance comparison for 100000 insertions:
 ```
 **Conclusion:**  
 The ```std::vector``` implementation is significantly faster than the ```std::list``` implementation when the middle position is not fixed. This performance difference arises because accessing elements in a vector is O(1) due to contiguous memory storage, whereas accessing elements in a list is O(N) since it requires traversal. Inserting elements into a vector, however, is O(N) because it may involve shifting elements, while insertion in a list is O(1) as it only requires pointer adjustments. Despite this, vectors often outperform lists due to better cache locality. Pre-allocating space in a vector using the reserve function can further enhance performance by reducing the need for frequent reallocations. 
-STACKOVERFLOW.COM
 
 This program allows for a quick performance comparison between two commonly used containers, `std::vector` and `std::list`. You can adjust the value of `N` to test with different amounts of data and observe how each container performs in terms of insertion and removal operations.
